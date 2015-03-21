@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/MediApp-Android.iml" filepath="$PROJECT_DIR$/MediApp-Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/Mediapp.iml" filepath="$PROJECT_DIR$/Mediapp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Mediapp/Mediapp-Mediapp.iml" filepath="$PROJECT_DIR$/Mediapp/Mediapp-Mediapp.iml" />
     </modules>
   </component>
 </project>
