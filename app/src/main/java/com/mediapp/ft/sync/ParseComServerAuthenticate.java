@@ -23,41 +23,39 @@ import java.util.List;
 public class ParseComServerAuthenticate implements ServerAuthenticate{
 
     @Override
-    public String userSignUp(String email, String pass, String authType) throws Exception {
+    public String userSignUp(String userName, String email, String pass, String passConfirmation) throws Exception {
 
         String url = "http://192.168.0.100:3000/api/v1/users";
 
         DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(url);
+        HttpResponse response = null;
 
         // SignUp Data
         List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+        pairs.add(new BasicNameValuePair("name", userName));
         pairs.add(new BasicNameValuePair("email", email));
         pairs.add(new BasicNameValuePair("password", pass));
-        pairs.add(new BasicNameValuePair("password_confirmation", pass));
+        pairs.add(new BasicNameValuePair("password_confirmation",  passConfirmation));
         httpPost.setEntity(new UrlEncodedFormEntity(pairs));
 
-        String authtoken = null;
 
         try {
-            HttpResponse response = httpClient.execute(httpPost);
+            response = httpClient.execute(httpPost);
             String responseString = EntityUtils.toString(response.getEntity());
 
             if (response.getStatusLine().getStatusCode() != 201) {
                 throw new Exception("Error creating user");
             }
 
-            JSONObject json = new JSONObject(responseString);
-            String jsonEmail = json.getString("email");
-            User createdUser = new User(jsonEmail,"");
-
-            authtoken = createdUser.sessionToken;
+            return responseString;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return String.valueOf(response.getStatusLine().getStatusCode());
         }
 
-        return authtoken;
+
     }
 
     @Override

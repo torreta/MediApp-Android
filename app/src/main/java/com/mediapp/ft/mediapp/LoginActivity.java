@@ -318,6 +318,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(false);
         }
     }
+
+    /** Go To Sign Up Form*/
+    public void goSignUp(View view) {
+        Intent myIntent = new Intent(LoginActivity.this,SignUpActivity.class);
+        LoginActivity.this.startActivity(myIntent);
+    }
 }
 
 
