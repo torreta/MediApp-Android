@@ -85,7 +85,7 @@ public class ParseComServerAuthenticate implements ServerAuthenticate{
             response.getEntity().writeTo(out);
             responseString = out.toString();
 
-            // Json TO String
+            // Get Token String
             JSONObject myjson = new JSONObject(responseString);
             String token = myjson.getString("token");
 

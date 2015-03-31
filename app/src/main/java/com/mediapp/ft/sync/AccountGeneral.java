@@ -23,5 +23,10 @@ public class AccountGeneral {
     public static final String AUTHTOKEN_TYPE_FULL_ACCESS = "Full access";
     public static final String AUTHTOKEN_TYPE_FULL_ACCESS_LABEL = "Full access to an MediApp account";
 
+    /**
+     * User data fields
+     */
+    public static final String USERDATA_USER_OBJ_ID = "userObjectId";   //Parse.com object id
+
     public static final ServerAuthenticate sServerAuthenticate = new ParseComServerAuthenticate();
 }
