@@ -194,6 +194,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
+            System.out.println("***** NOT COOL BRAH");
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
@@ -274,7 +275,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             Bundle data = new Bundle();
             final String accountType = AccountGeneral.ACCOUNT_TYPE;
 
-
             try {
 
                 // Create Account
@@ -282,6 +282,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 final Account account = new Account(mEmail, accountType);
                 mAccountManager.addAccountExplicitly(account, mPassword, null);
                 mAccountManager.setAuthToken(account, accountType, authtoken);
+                System.out.println( mAccountManager.peekAuthToken(account, accountType));
                 //Get Token
                 /*mAccountManager = AccountManager.get(getBaseContext());
                 String accountType = AccountGeneral.ACCOUNT_TYPE;
@@ -305,6 +306,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             if (success) {
                 finish();
                 Intent myIntent = new Intent(LoginActivity.this,MainActivity.class);
+                myIntent.putExtra("account_name", mEmail);
                 LoginActivity.this.startActivity(myIntent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

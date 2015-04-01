@@ -66,7 +66,7 @@ public class Treatment implements Serializable {
         //Cast argument to Treatment Object
         Treatment t = (Treatment) o;
 
-        if (name!= t.name && hour!= t.hour && frequency !=t.frequency) return false;
+        if (!name.equals(t.name) && hour.equals(t.hour) && frequency !=t.frequency) return false;
 
         return true;
     }

@@ -65,38 +65,51 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
         try {
-            String authToken = mAccountManager.blockingGetAuthToken(account,
-                    AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, true);
+           /* String authToken = mAccountManager.blockingGetAuthToken(account,
+                    AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, true);*/
+            String authToken = mAccountManager.peekAuthToken(account, AccountGeneral.ACCOUNT_TYPE);
             String userObjectId = mAccountManager.getUserData(account,
                     AccountGeneral.USERDATA_USER_OBJ_ID);
 
+            System.out.println("Get REMOTE Treatments");
             //Get Treatments from server
-            List<Treatment> remoteTreaments= getTreatments(authToken);
+            List<Treatment> remoteTreatments= getTreatments(authToken);
+            System.out.println("Get REMOTE Treatments");
 
-            // Get local db Treatments
-            ArrayList<Treatment> mTreaments = new ArrayList<Treatment>();
-            Cursor curTreaments = provider.query(DatabaseContract.Treatments.CONTENT_URI, null, null, null, null);
-            if (curTreaments != null) {
-                while (curTreaments.moveToNext()) {
-                    mTreaments .add(Treatment.fromCursor(curTreaments));
-                }
-                curTreaments.close();
-            }
+           System.out.println("****INIT Get local Treatments");
+           // Get local db Treatments
+           ArrayList<Treatment> mTreaments = new ArrayList<Treatment>();
+           Cursor curTreatments = provider.query(DatabaseContract.Treatments.CONTENT_URI, null, null, null, null);
+           if (curTreatments != null) {
+               while (curTreatments.moveToNext()) {
+                   mTreaments .add(Treatment.fromCursor(curTreatments));
+               }
+               curTreatments.close();
+           }
+            System.out.println("****FINISH Get local Treatments");
 
+            System.out.println("****INIT Check Missing in Remote");
             // Check Treatments missing in remote
             ArrayList<Treatment> tToRemote= new ArrayList<Treatment>();
             for (Treatment localTreatment : mTreaments) {
-                if (!remoteTreaments.contains(localTreatment))
+                if (!remoteTreatments.contains(localTreatment))
                     tToRemote.add(localTreatment);
             }
+            System.out.println("****FINISH Check Missing in Remote");
 
+            System.out.println("****INIT Check Missing in Local");
             //  Check Treatments missing in Local DB
             ArrayList<Treatment> tToLocal = new ArrayList<Treatment>();
-            for (Treatment remoteTvShow : remoteTreaments) {
-                if (!mTreaments.contains(remoteTvShow))
-                    tToLocal.add(remoteTvShow);
+            for (Treatment remoteTreatment : remoteTreatments) {
+                if (!mTreaments.contains(remoteTreatment)) {
+                    tToLocal.add(remoteTreatment);
+                    System.out.println("****is Missing!");
+                }
             }
+            System.out.println("****FINISH Check Missing in Local");
 
+
+            System.out.println("****INIT Update Server");
             // Update Server
             if (tToRemote.size() == 0) {
                 Log.d("MediApp", "> No local changes to update server");
@@ -106,13 +119,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 // Updating remote tv shows
                 for (Treatment remoteTreament : tToRemote) {
                     Log.d("MediApp", "> Local -> Remote [" + remoteTreament.name + "]");
-                    putTreament(authToken, userObjectId, remoteTreament);
+                    putTreatment(authToken, userObjectId, remoteTreament);
                 }
             }
+            System.out.println("****FINISH Update Server");
 
+            System.out.println("****INIT Update Local");
             // Update LocalDB
             if (tToLocal.size() == 0) {
-                Log.d("MediApp", "> No local changes to update server");
+                Log.d("MediApp", "> No local changes to update local");
             } else {
                 Log.d("MediApp", "> Updating local database with remote changes");
 
@@ -125,16 +140,21 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
                 provider.bulkInsert(DatabaseContract.Treatments.CONTENT_URI, tToLocalValues);
             }
+            System.out.println("****Finish Update Local");
 
             Log.d("MediApp", "> Finished.");
 
         } catch (OperationCanceledException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         } catch (AuthenticatorException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
@@ -144,13 +164,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     // Get list of treatments from server
     public List<Treatment> getTreatments(String auth) throws Exception {
 
-        List<Treatment> results = null;
+        List<Treatment> results =new ArrayList<Treatment>();
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(URL);
         HttpResponse response;
         String responseString = "";
 
-        get.setHeader("token", "auth");
+        get.setHeader("token", auth);
 
         try {
             response = client.execute(get);
@@ -166,11 +186,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 JSONArray mJson= new JSONArray(responseString);
                 Log.d("Treatments: ", mJson.toString());
 
-                //Iterate array and craete new treatment. ADd treatment to list and return list
+                //Iterate array and create new treatment. ADd treatment to list and return list
                 for(int i=0;i< mJson.length(); i++){
                     JSONObject t =  mJson.getJSONObject(i);
-                    Treatment mTreament= new Treatment(t.getString("name"),t.getString("start"), t.getString("finish"), t.getString("hour"),t.getInt("frequency"),null);
+                    Log.d("Treatments: ", t.toString());
+                    Treatment mTreament= new Treatment(t.getString("name"),t.getString("start"), t.getString("finish"), t.getString("hour"),Integer.valueOf(t.getString("frequency")),"");
+                    Log.d("Treatment: ", mTreament.toString());
                     results.add(mTreament);
+                    Log.d("Treatment: ", "added");
                 }
 
                 return results;
@@ -189,7 +212,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     //Update Treatment
-    public void putTreament(String authtoken, String userId, Treatment tToAdd) throws Exception {
+    public void putTreatment(String authtoken, String userId, Treatment tToAdd) throws Exception {
 
         Log.d("MediApp", "putTreament ["+tToAdd.name+"]");
 
@@ -200,7 +223,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         // Parametros
         List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-        pairs.add(new BasicNameValuePair("name", tToAdd.name));
+        pairs.add(new BasicNameValuePair("medication_name", tToAdd.name));
         pairs.add(new BasicNameValuePair("frequency", Integer.toString(tToAdd.frequency)));
         pairs.add(new BasicNameValuePair("finish", tToAdd.finish));
         pairs.add(new BasicNameValuePair("hour", tToAdd.hour));

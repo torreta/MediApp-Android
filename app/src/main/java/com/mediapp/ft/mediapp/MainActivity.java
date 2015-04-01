@@ -2,9 +2,11 @@ package com.mediapp.ft.mediapp;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.ProgressDialog;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.content.ContentResolver;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -14,9 +16,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.mediapp.ft.db.DatabaseContract;
 import com.mediapp.ft.db.Treatment;
-import com.mediapp.ft.sync.SyncAdapter;
+import com.mediapp.ft.sync.AccountGeneral;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
@@ -25,60 +29,51 @@ public class MainActivity extends ActionBarActivity {
     private AccountManager mAccountManager;
     private String authToken = null;
     private Account mConnectedAccount;
-    private SyncAdapter adapter = new SyncAdapter(getBaseContext(),true);
+    private String accountName;
+    // Get Account
+
 
     // UI
     private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // UI
-        mAccountManager = AccountManager.get(this);
-        mListView = (ListView) findViewById(R.id.list_treatments);
+        //Get Intent
+        Bundle extras = getIntent().getExtras();
+        accountName = extras.getString("account_name");
 
+        // UI
+        mListView = (ListView) findViewById(R.id.list_treatments);
+        // Read data and fill list view
+        List<Treatment> treatments= readFromContentProvider();
+        ArrayAdapter<Treatment> adapter = new ArrayAdapter<Treatment>(MainActivity.this, android.R.layout.simple_list_item_1, treatments);
+        mListView.setAdapter(adapter);
+
+       //Set Account VariablesVariables
+        mAccountManager = AccountManager.get(this);
+        mConnectedAccount = new Account( accountName, AccountGeneral.ACCOUNT_TYPE);
+
+        // Buttons
         // Sync Button
         findViewById(R.id.btn_sync).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                new AsyncTask<Void, Void, List<Treatment>>() {
+            public void onClick(View view) {
+                if (mConnectedAccount == null) {
+                    Toast.makeText(MainActivity.this, "Please connect first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                    ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
-                    @Override
-                    protected void onPreExecute() {
-                        if (authToken == null) {
-                            Toast.makeText(MainActivity.this, "Please connect first", Toast.LENGTH_SHORT).show();
-                            cancel(true);
-                        } else {
-                            progressDialog.show();
-                        }
-                    }
-
-                    @Override
-                    protected List<Treatment> doInBackground(Void... nothing) {
-                        try {
-                            return adapter.getTreatments(authToken);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(List<Treatment> treatments) {
-                        progressDialog.dismiss();
-                        if (treatments != null) {
-                            ArrayAdapter<Treatment> adapter = new ArrayAdapter<Treatment>(MainActivity.this,
-                                    android.R.layout.simple_list_item_1, treatments);
-                            mListView.setAdapter(adapter);
-                        }
-                    }
-                }.execute();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true); // Performing a sync no matter if it's off
+                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true); // Performing a sync no matter if it's off
+                ContentResolver.requestSync(mConnectedAccount, DatabaseContract.AUTHORITY, bundle);
+                mListView.setAdapter(new ArrayAdapter<Treatment>(MainActivity.this, android.R.layout.simple_list_item_1, readFromContentProvider()));
             }
         });
-
 
     }
 
@@ -110,6 +105,47 @@ public class MainActivity extends ActionBarActivity {
         Intent myIntent = new Intent(MainActivity.this,LoginActivity.class);
         MainActivity.this.startActivity(myIntent);
         // Do something in response to button
+    }
+
+    //Get Data (treatments) from content provider
+    private List<Treatment> readFromContentProvider() {
+        Cursor curTreatments = getContentResolver().query(DatabaseContract.Treatments.CONTENT_URI, null, null, null, null);
+
+        ArrayList<Treatment> treatments = new ArrayList<Treatment>();
+
+        if (curTreatments != null) {
+            while (curTreatments.moveToNext())
+                treatments.add(Treatment.fromCursor(curTreatments));
+            curTreatments.close();
+        }
+        return treatments;
+    }
+
+    private void getAccount() {
+        System.out.println("*****INIT GET ACCOUNT");
+        final AccountManagerFuture<Bundle> future = mAccountManager.getAuthTokenByFeatures(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, this, null, null,
+                new AccountManagerCallback<Bundle>() {
+                    @Override
+                    public void run(AccountManagerFuture<Bundle> future) {
+                        Bundle bnd = null;
+                        try {
+                            bnd = future.getResult();
+                            authToken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
+                            if (authToken != null) {
+
+                                String accountName = bnd.getString(AccountManager.KEY_ACCOUNT_NAME);
+                                mConnectedAccount = new Account(accountName, AccountGeneral.ACCOUNT_TYPE);
+                            }
+                            System.out.println("*****GetTokenForAccount Bundle is \" + bnd");
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("*****Error: " + e.getMessage());
+                        }
+                    }
+                }
+                , null);
+        System.out.println("*****FINISH GET ACCOUNT");
     }
 
 }

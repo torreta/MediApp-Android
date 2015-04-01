@@ -16,8 +16,6 @@ import static com.mediapp.ft.db.DatabaseContract.AUTHORITY;
 /**
  * Created by Frank on 3/30/2015.
  */
-//TODO: make a provider
-
 
 public class DbProvider extends ContentProvider {
 

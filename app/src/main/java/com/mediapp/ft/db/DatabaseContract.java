@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
  */
 public final class DatabaseContract {
 
-    public static final String AUTHORITY = "com.mediapp.ft";
+    public static final String AUTHORITY = "com.mediapp.ft.db.DbProvider";
     public static final String SCHEME = "content://";
     public static final String SLASH = "/";
     public static final  String DATABASE_NAME      = "database.db";
@@ -31,7 +31,7 @@ public final class DatabaseContract {
     public static final class Treatments implements BaseColumns {
 
         private Treatments(){}
-        public static final String TABLE_NAME       = "Treatments";
+        public static final String TABLE_NAME       = "treatments";
         public static final String COLUMN_NAME_NAME= "name";
         public static final String COLUMN_NAME_START = "start";
         public static final String COLUMN_NAME_FINISH = "finish";
@@ -77,7 +77,7 @@ public final class DatabaseContract {
                 COLUMN_NAME_FINISH + TEXT_TYPE + COMMA_SEP +
                 COLUMN_NAME_HOUR + TEXT_TYPE + COMMA_SEP +
                 COLUMN_NAME_PICTURE + TEXT_TYPE + COMMA_SEP +
-                COLUMN_NAME_FREQUENCY + "INTEGER" + " )";
+                COLUMN_NAME_FREQUENCY + " INTEGER )";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
