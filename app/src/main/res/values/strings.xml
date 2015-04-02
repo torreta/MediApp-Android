@@ -7,6 +7,9 @@
     <string name="treatments">Treatments</string>
     <string name="sync">Sync</string>
     <string name="add">Add</string>
+    <string name="back">Back</string>
     <string name="add_new">Add New</string>
     <string name="delete">Delete</string>
+    <string name="title_activity_new_treatment">NewTreatmentActivity</string>
+    <string name="title_activity_treatment">TreatmentActivity</string>
 </resources>

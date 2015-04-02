@@ -2,6 +2,7 @@ package com.mediapp.ft.db;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 
 import java.io.Serializable;
 
@@ -60,6 +61,7 @@ public class Treatment implements Serializable {
 
     @Override
     public boolean equals(Object o) {
+        Log.d("MediApp","Equals!!!");
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -71,15 +73,16 @@ public class Treatment implements Serializable {
         return true;
     }
 
+    // Treatment to show in list
     @Override
     public String toString() {
-        return "Treatment{" +
-                "name='" + name + '\'' +
-                ", start='" + start + '\'' +
-                ", finish='" + finish + '\'' +
-                ", hour='" + hour + '\'' +
-                ", frequency=" + frequency +
-                ", picture='" + picture + '\'' +
+        return "{" +
+                "'name':'" + name + '\'' +
+                ", 'start':'" + start + '\'' +
+                ", 'finish':'" + finish + '\'' +
+                ", 'hour':'" + hour + '\'' +
+                ", 'frequency':" + frequency +
+                ", 'picture':'" + picture + '\'' +
                 '}';
     }
 

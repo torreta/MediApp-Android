@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -30,10 +31,8 @@ public class MainActivity extends ActionBarActivity {
     private String authToken = null;
     private Account mConnectedAccount;
     private String accountName;
-    // Get Account
 
-
-    // UI
+     // UI
     private ListView mListView;
 
     @Override
@@ -43,8 +42,9 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         //Get Intent
-        Bundle extras = getIntent().getExtras();
-        accountName = extras.getString("account_name");
+        Global global;
+        global=((Global)getApplicationContext());
+        accountName = global.getAccountName();
 
         // UI
         mListView = (ListView) findViewById(R.id.list_treatments);
@@ -75,6 +75,21 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        // Set Lister on list View
+        mListView.setClickable(true);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
+
+                String t = mListView.getItemAtPosition(myItemInt).toString();
+
+                Intent myIntent = new Intent(MainActivity.this,TreatmentActivity.class);
+                myIntent.putExtra("treatment",t);
+                MainActivity.this.startActivity(myIntent);
+
+            }
+        });
+
     }
 
 
@@ -100,12 +115,18 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** Called when the user clicks the login button */
+    // Go To Login
     public void goLogin(View view) {
         Intent myIntent = new Intent(MainActivity.this,LoginActivity.class);
         MainActivity.this.startActivity(myIntent);
-        // Do something in response to button
     }
+
+    // Go To Login
+    public void goNewTreatment(View view) {
+        Intent myIntent = new Intent(MainActivity.this,NewTreatmentActivity.class);
+        MainActivity.this.startActivity(myIntent);
+    }
+
 
     //Get Data (treatments) from content provider
     private List<Treatment> readFromContentProvider() {

@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.mediapp.ft.mediapp.TreatmentActivity">
+
+    <TextView
+        android:text="LALALALAL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/treatment"
+        />
+    <Button android:id="@+id/btn_delete" style="?android:textAppearanceSmall"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" android:text="@string/delete"
+        android:textStyle="bold"
+        android:onClick="deleteTreatment"
+        />
+
+    <Button android:id="@+id/btn_back" style="?android:textAppearanceSmall"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" android:text="@string/back"
+        android:textStyle="bold"
+        android:onClick="goBack"
+        />
+
+</LinearLayout>

@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
+        android:name=".Global"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -53,24 +54,32 @@
             android:name="com.mediapp.ft.sync.SyncService"
             android:enabled="true"
             android:exported="true"
-            android:process=":sync"
-            >
-
+            android:process=":sync" >
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
+
             <meta-data
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/sync_adapter" />
         </service>
 
-        <provider android:authorities="com.mediapp.ft.db.DbProvider"
-            android:enabled="true"
+        <provider
             android:name="com.mediapp.ft.db.DbProvider"
+            android:authorities="com.mediapp.ft.db.DbProvider"
+            android:enabled="true"
             android:exported="true"
-            android:syncable="true"
-            >
+            android:syncable="true" >
         </provider>
+
+        <activity
+            android:name=".NewTreatmentActivity"
+            android:label="@string/title_activity_new_treatment" >
+        </activity>
+        <activity
+            android:name=".TreatmentActivity"
+            android:label="@string/title_activity_treatment" >
+        </activity>
     </application>
 
 </manifest>

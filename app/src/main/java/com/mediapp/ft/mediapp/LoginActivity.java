@@ -279,16 +279,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
                 // Create Account
                 authtoken = sServerAuthenticate.userSignIn(mEmail,  mPassword, accountType);
+
+                if (authtoken.isEmpty()) return false;
+
                 final Account account = new Account(mEmail, accountType);
                 mAccountManager.addAccountExplicitly(account, mPassword, null);
                 mAccountManager.setAuthToken(account, accountType, authtoken);
-                System.out.println( mAccountManager.peekAuthToken(account, accountType));
-                //Get Token
-                /*mAccountManager = AccountManager.get(getBaseContext());
-                String accountType = AccountGeneral.ACCOUNT_TYPE;
-                String name = mAccountManager.getAccountsByType(accountType)[0].name);
-                Account account = new Account(name, accountType);
-                String token = mAccountManager.peekAuthToken(account, accountType);*/
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 return false;
@@ -306,7 +302,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             if (success) {
                 finish();
                 Intent myIntent = new Intent(LoginActivity.this,MainActivity.class);
-                myIntent.putExtra("account_name", mEmail);
+
+                // Set account
+                Global global;
+                global=((Global)getApplicationContext());
+                global.setAccountName(mEmail);
+
                 LoginActivity.this.startActivity(myIntent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

@@ -65,16 +65,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
         try {
-           /* String authToken = mAccountManager.blockingGetAuthToken(account,
-                    AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, true);*/
+
             String authToken = mAccountManager.peekAuthToken(account, AccountGeneral.ACCOUNT_TYPE);
             String userObjectId = mAccountManager.getUserData(account,
                     AccountGeneral.USERDATA_USER_OBJ_ID);
 
-            System.out.println("Get REMOTE Treatments");
+            System.out.println("***INIT Get REMOTE Treatments");
             //Get Treatments from server
             List<Treatment> remoteTreatments= getTreatments(authToken);
-            System.out.println("Get REMOTE Treatments");
+            Log.d("MediApp", "Remote Treatment: "+remoteTreatments.toString());
+            System.out.println("****FINISH Get REMOTE Treatments");
 
            System.out.println("****INIT Get local Treatments");
            // Get local db Treatments
@@ -82,7 +82,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
            Cursor curTreatments = provider.query(DatabaseContract.Treatments.CONTENT_URI, null, null, null, null);
            if (curTreatments != null) {
                while (curTreatments.moveToNext()) {
-                   mTreaments .add(Treatment.fromCursor(curTreatments));
+                   mTreaments.add(Treatment.fromCursor(curTreatments));
+                   Log.d("MediApp", "Local Treatment: "+Treatment.fromCursor(curTreatments).toString());
                }
                curTreatments.close();
            }
@@ -92,8 +93,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             // Check Treatments missing in remote
             ArrayList<Treatment> tToRemote= new ArrayList<Treatment>();
             for (Treatment localTreatment : mTreaments) {
-                if (!remoteTreatments.contains(localTreatment))
+                if (!remoteTreatments.contains(localTreatment)) {
+                    Log.d("MediApp", "Missing Treatment: "+localTreatment.toString());
                     tToRemote.add(localTreatment);
+                }
             }
             System.out.println("****FINISH Check Missing in Remote");
 
@@ -184,16 +187,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 // Create array list of treatments from from json array
                 JSONArray mJson= new JSONArray(responseString);
-                Log.d("Treatments: ", mJson.toString());
 
                 //Iterate array and create new treatment. ADd treatment to list and return list
                 for(int i=0;i< mJson.length(); i++){
                     JSONObject t =  mJson.getJSONObject(i);
-                    Log.d("Treatments: ", t.toString());
-                    Treatment mTreament= new Treatment(t.getString("name"),t.getString("start"), t.getString("finish"), t.getString("hour"),Integer.valueOf(t.getString("frequency")),"");
-                    Log.d("Treatment: ", mTreament.toString());
+                    Treatment mTreament= new Treatment(t.getString("name"),t.getString("start"), t.getString("finish"), t.getString("hour"),Integer.parseInt(t.getString("frequency")),"");
                     results.add(mTreament);
-                    Log.d("Treatment: ", "added");
                 }
 
                 return results;

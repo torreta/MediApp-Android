@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="medication">Medication</string>
+    <string name="start">Start Date</string>
+    <string name="finish">Finish Date</string>
+    <string name="hour">Hour</string>
+    <string name="frequency">Frequency (Hrs.)</string>
+</resources>
