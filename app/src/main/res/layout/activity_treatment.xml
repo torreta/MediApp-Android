@@ -5,26 +5,45 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_vertical_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    style="@style/MedStyle.View"
     tools:context="com.mediapp.ft.mediapp.TreatmentActivity">
 
-    <TextView
-        android:text="LALALALAL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/treatment"
-        />
-    <Button android:id="@+id/btn_delete" style="?android:textAppearanceSmall"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" android:text="@string/delete"
-        android:textStyle="bold"
-        android:onClick="deleteTreatment"
-        />
+    <!-- Login progress -->
+    <ProgressBar android:id="@+id/login_progress" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp" android:visibility="gone" />
 
-    <Button android:id="@+id/btn_back" style="?android:textAppearanceSmall"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" android:text="@string/back"
-        android:textStyle="bold"
-        android:onClick="goBack"
-        />
+    <ScrollView android:id="@+id/login_form" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical"
+            android:weightSum="1">
+
+            <TextView
+                android:text="LALALALAL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/treatment"
+                style="@style/MedStyle"
+                />
+            <Button android:id="@+id/btn_delete" style="@style/MedStyle.Button"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:text="@string/delete"
+                android:textStyle="bold"
+                android:onClick="deleteTreatment"
+                />
+
+            <Button android:id="@+id/btn_back" style="@style/MedStyle.Button"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:text="@string/back"
+                android:textStyle="bold"
+                android:onClick="goBack"
+                />
+
+        </LinearLayout>
+        </ScrollView>
 
 </LinearLayout>
+
+

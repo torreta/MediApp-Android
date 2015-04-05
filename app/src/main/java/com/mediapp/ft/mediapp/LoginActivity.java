@@ -48,7 +48,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     public final static String ARG_IS_ADDING_NEW_ACCOUNT = "IS_ADDING_ACCOUNT";
     AccountManager mAccountManager;
 
-    private static String SESSION_URL = "http://192.168.0.100:3000/api/v1/sessions";
+    private static String SESSION_URL = "http://torreta-163528.sae1.nitrousbox.com/api/v1/sessions";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */

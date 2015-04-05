@@ -5,4 +5,59 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="MedStyle">
+        <!-- Customize your theme here. -->
+
+        <item name="android:layout_width"> match_parent</item>
+        <item name="android:layout_height"> wrap_content </item>
+        <item name="android:gravity">left</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text_color_red</item>
+        <item name="android:typeface">serif</item>
+        <item name="android:textColorHint">@color/text_color_dark</item>
+        <!--<item name="android:background">@color/material_blue_grey_800</item>-->
+
+
+    </style>
+
+    <style name="MedStyle.Title">
+        <item name="android:textSize"> 30sp </item>
+        <item name="android:textColor">@color/med_green</item>
+        <!--<item name="android:gravity">center</item>-->
+    </style>
+
+    <style name="MedStyle.Button">
+        <!--<item name="android:textSize"> 20sp</item>-->
+        <item name="android:background">@color/med_green</item>
+        <item name="android:textColor">@color/text_color_dark</item>
+        <!--<item name="android:"></item>-->
+
+        <!--invento-->
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textSize">16dip</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <!--<item name="android:elevation">3dp</item>-->
+
+    </style>
+
+    <style name="MedStyle.View">
+        <!--<item name="android:textSize"> 20sp</item>-->
+        <item name="android:background">@color/background_color</item>
+        <item name="android:gravity">center_vertical</item>
+
+    </style>
+
+    <style name="MedStyle.List">
+        <item name="android:textSize"> 20sp</item>
+        <item name="android:background">@color/background_color</item>
+        <item name="android:gravity">center_vertical</item>
+
+    </style>
+
+    <color name="background_color">#FFFFFF</color>
+    <color name="med_green">#b9f6ca</color>
+    <color name="text_color_dark">#607d8b</color>
+    <color name="text_color_red">#ff5722</color>
 </resources>
