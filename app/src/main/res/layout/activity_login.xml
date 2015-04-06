@@ -21,6 +21,18 @@
             android:weightSum="1">
 
 
+
+            <ImageView
+                style="@style/MedStyle.Title"
+                android:src="@drawable/logox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/logo"
+                android:layout_alignTop="@+id/mainTitle"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+
             <AutoCompleteTextView android:id="@+id/email" style="@style/MedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:hint="@string/prompt_email"

@@ -23,13 +23,13 @@
     <style name="MedStyle.Title">
         <item name="android:textSize"> 30sp </item>
         <item name="android:textColor">@color/med_green</item>
-        <!--<item name="android:gravity">center</item>-->
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="MedStyle.Button">
         <!--<item name="android:textSize"> 20sp</item>-->
         <item name="android:background">@color/med_green</item>
-        <item name="android:textColor">@color/text_color_dark</item>
+        <item name="android:textColor">@color/background_color</item>
         <!--<item name="android:"></item>-->
 
         <!--invento-->
@@ -57,7 +57,8 @@
     </style>
 
     <color name="background_color">#FFFFFF</color>
-    <color name="med_green">#b9f6ca</color>
+    <color name="med_green">#17D6B6</color>
     <color name="text_color_dark">#607d8b</color>
     <color name="text_color_red">#ff5722</color>
+    <!--FFF-->
 </resources>
