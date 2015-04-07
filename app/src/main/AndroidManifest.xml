@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".Global"
@@ -80,6 +81,8 @@
             android:name=".TreatmentActivity"
             android:label="@string/title_activity_treatment" >
         </activity>
+        <receiver android:name=".AlarmReceiver"  android:enabled="true"/>
+        <service android:name=".AlarmService" />
     </application>
 
 </manifest>

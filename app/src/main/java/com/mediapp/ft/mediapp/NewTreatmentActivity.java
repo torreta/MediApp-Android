@@ -1,5 +1,6 @@
 package com.mediapp.ft.mediapp;
 
+import android.content.*;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.AlarmManager;
 
 import com.mediapp.ft.db.DatabaseContract;
 import com.mediapp.ft.db.DbHelper;
@@ -35,6 +37,11 @@ public class NewTreatmentActivity extends ActionBarActivity {
     private EditText mFrequencyView;
     private View mTreatmentFormView;
     private View mProgressView;
+
+    //alarm referencers
+    public AlarmManager alarmManager;
+    Intent alarmIntent;
+    PendingIntent pendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,11 +114,13 @@ public class NewTreatmentActivity extends ActionBarActivity {
                     .setTicker("Take Treatment")
                     .setContentTitle(mNameView.getText().toString()) //name
                     .setContentText("Take your pill at: " + mHourView.getText().toString())
-                    .setSmallIcon(R.drawable.pill)
+                    .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentIntent(pIntent).getNotification();
             noti.flags=Notification.FLAG_AUTO_CANCEL;
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             notificationManager.notify(0, noti);
+
+//            setAlarm();//call to the complex type of Alarm (refine)
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -187,5 +196,35 @@ public class NewTreatmentActivity extends ActionBarActivity {
     public void goMain(View view) {
         Intent myIntent = new Intent(NewTreatmentActivity.this, MainActivity.class);
         NewTreatmentActivity.this.startActivity(myIntent);
+    }
+
+
+    public void setAlarm(){
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmIntent = new Intent(this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast( this, 0, alarmIntent, 0);
+
+
+        //invento particular
+        Calendar alarmStartTime = Calendar.getInstance();
+        alarmStartTime.add(Calendar.MINUTE, 2);
+        alarmManager.setRepeating(AlarmManager.RTC, alarmStartTime.getTimeInMillis(), getInterval(), pendingIntent);
+        Log.i("GOOD","Alarms set every two minutes. digo yomail1@gmail.com");
+
+
+        //get time
+        alarmStartTime.set(Calendar.HOUR_OF_DAY, 10);
+        alarmStartTime.set(Calendar.MINUTE, 00);
+        alarmStartTime.set(Calendar.SECOND, 0);
+        alarmManager.setRepeating(AlarmManager.RTC, alarmStartTime.getTimeInMillis(), getInterval(), pendingIntent);
+    }
+    private int getInterval(){
+        int days = 1;
+        int hours = 24;
+        int minutes = 60;
+        int seconds = 60;
+        int milliseconds = 1000;
+        int repeatMS = days * hours * minutes * seconds * milliseconds;
+        return repeatMS;
     }
 }
