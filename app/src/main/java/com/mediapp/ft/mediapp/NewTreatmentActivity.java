@@ -12,6 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 
 import com.mediapp.ft.db.DatabaseContract;
 import com.mediapp.ft.db.DbHelper;
@@ -96,6 +99,19 @@ public class NewTreatmentActivity extends ActionBarActivity {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.insert(DatabaseContract.Treatments.TABLE_NAME,null,tToLocalValues);
             Log.d("MediApp", "Inserted ");
+
+            //creating the notification
+            Intent intent = new Intent();
+            PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            Notification noti = new Notification.Builder(this)
+                    .setTicker("Take Treatment")
+                    .setContentTitle(mNameView.getText().toString()) //name
+                    .setContentText("Take your pill at: " + mHourView.getText().toString())
+                    .setSmallIcon(R.drawable.pill)
+                    .setContentIntent(pIntent).getNotification();
+            noti.flags=Notification.FLAG_AUTO_CANCEL;
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.notify(0, noti);
 
         } catch (Exception e) {
             e.printStackTrace();
