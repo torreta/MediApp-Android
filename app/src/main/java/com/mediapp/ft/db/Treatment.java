@@ -86,5 +86,19 @@ public class Treatment implements Serializable {
                 '}';
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public String getFinish() {
+        return finish;
+    }
+
+    public String getHour() {
+        return hour;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
 }

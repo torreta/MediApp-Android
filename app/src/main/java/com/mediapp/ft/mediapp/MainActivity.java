@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -50,7 +51,13 @@ public class MainActivity extends ActionBarActivity {
         mListView = (ListView) findViewById(R.id.list_treatments);
         // Read data and fill list view
         List<Treatment> treatments= readFromContentProvider();
+
+
+
         ArrayAdapter<Treatment> adapter = new ArrayAdapter<Treatment>(MainActivity.this, android.R.layout.simple_list_item_1, treatments);
+
+//        ListAdapter<Treatment> adapter = new TreatmentAdapter(MainActivity.this,11,treatments);
+
         mListView.setAdapter(adapter);
 
        //Set Account VariablesVariables
