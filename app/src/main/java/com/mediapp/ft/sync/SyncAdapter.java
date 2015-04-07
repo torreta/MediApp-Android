@@ -42,7 +42,7 @@ import java.util.List;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public static final String TAG = "SyncAdapter";
 
-    private static final String URL = "http://192.168.0.100:3000/api/v1/treatments";
+    private static final String URL = "http://torreta-163528.sae1.nitrousbox.com/api/v1/treatments";
 
     /**
      * Network connection timeout, in milliseconds.
