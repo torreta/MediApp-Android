@@ -25,7 +25,7 @@ public class ParseComServerAuthenticate implements ServerAuthenticate{
     @Override
     public String userSignUp(String userName, String email, String pass, String passConfirmation) throws Exception {
 
-        String url = "http://192.168.0.100:3000/api/v1/users";
+        String url = "http://torreta-163528.sae1.nitrousbox.com/api/v1/users";
 
         DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(url);
@@ -62,7 +62,7 @@ public class ParseComServerAuthenticate implements ServerAuthenticate{
     public String userSignIn(String user, String pass, String authType) throws Exception {
 
         DefaultHttpClient httpClient = new DefaultHttpClient();
-        String url = "http://192.168.0.100:3000/api/v1/sessions";
+        String url = "http://torreta-163528.sae1.nitrousbox.com/api/v1/sessions";
         String responseString = null;
 
         HttpPost post = new HttpPost(url);

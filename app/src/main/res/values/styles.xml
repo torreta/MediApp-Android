@@ -59,6 +59,7 @@
     <color name="background_color">#FFFFFF</color>
     <color name="med_green">#17D6B6</color>
     <color name="text_color_dark">#607d8b</color>
-    <color name="text_color_red">#ff5722</color>
+    <!--<color name="text_color_red">#ff5722</color>-->
+    <color name="text_color_red">#607d8b</color>
     <!--FFF-->
 </resources>

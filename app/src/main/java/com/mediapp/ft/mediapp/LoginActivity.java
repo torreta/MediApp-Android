@@ -274,7 +274,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             String authtoken = null;
             Bundle data = new Bundle();
             final String accountType = AccountGeneral.ACCOUNT_TYPE;
-
+            System.out.println("estoy en el intento de login (func)");
             try {
 
                 // Create Account
@@ -286,6 +286,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 mAccountManager.addAccountExplicitly(account, mPassword, null);
                 mAccountManager.setAuthToken(account, accountType, authtoken);
             } catch (Exception e) {
+                System.out.println("estoy en el intento de login (fail?)");
                 System.out.println(e.getMessage());
                 return false;
             }
